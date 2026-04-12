@@ -32,13 +32,14 @@ app.post("/pdf", async (req, res) => {
         });
 
         await browser.close();
+        console.log("PDF SIZE:", pdf.length);
 
         res.setHeader("Content-Type", "application/pdf");
         res.send(pdf);
 
     } catch (e) {
-        console.error("PDF ERROR:", e);
-        res.status(500).send("PDF ERROR");
+        console.error("PDF ERROR FULL:", e);
+        res.status(500).send("PDF ERROR: " + e.message);
     }
 });
 
