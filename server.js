@@ -11,13 +11,17 @@ app.post("/pdf", async (req, res) => {
 
         const browser = await puppeteer.launch({
             headless: "new",
-            args: ["--no-sandbox", "--disable-setuid-sandbox"]
+            args: [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage"
+            ]
         });
 
         const page = await browser.newPage();
 
         await page.setContent(html, {
-            waitUntil: "networkidle0"
+            waitUntil: "load"
         });
 
         await page.emulateMediaType("print");
