@@ -9,12 +9,15 @@ app.post("/pdf", async (req, res) => {
     try {
         const { html } = req.body;
 
+        process.env.PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
+
         const browser = await puppeteer.launch({
             headless: "new",
             args: [
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
-                "--disable-dev-shm-usage"
+                "--disable-dev-shm-usage",
+                "--single-process"
             ]
         });
 
