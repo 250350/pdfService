@@ -31,4 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/java/pl/comp/pdfservice/node_modules/
+/node_modules/
