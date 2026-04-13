@@ -1,5 +1,6 @@
 const express = require("express");
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
+const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.post("/pdf", async (req, res) => {
 
         const browser = await puppeteer.launch({
             headless: "new",
+            executablePath,
             args: [
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
