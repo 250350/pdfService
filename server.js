@@ -16,6 +16,8 @@ app.post("/pdf", async (req, res) => {
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
                 "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--no-zygote",
                 "--single-process"
             ]
         });
@@ -23,7 +25,7 @@ app.post("/pdf", async (req, res) => {
         const page = await browser.newPage();
 
         await page.setContent(html, {
-            waitUntil: "load"
+            waitUntil: "networkidle0"
         });
 
         await page.emulateMediaType("print");
@@ -32,6 +34,7 @@ app.post("/pdf", async (req, res) => {
             format: "A4",
             printBackground: true,
         });
+        console.log("PDF GENERATED:", pdf.length);
 
         await browser.close();
         console.log("PDF SIZE:", pdf.length);
