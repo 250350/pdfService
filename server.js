@@ -10,13 +10,12 @@ app.use((req, res, next) => {
 
 app.use(express.json({ limit: "50mb" }));
 
-app.post("/", async (req, res) => {
+app.post("/pdf", async (req, res) => {
     try {
         const { html } = req.body;
 
         const browser = await puppeteer.launch({
             headless: "new",
-            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
             args: [
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
