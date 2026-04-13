@@ -1,5 +1,6 @@
 const express = require("express");
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
+const chromium = require("@sparticuz/chromium");
 
 const app = express();
 
@@ -13,21 +14,14 @@ app.post("/pdf", async (req, res) => {
         console.log("BEFORE PDF");
 
         const browser = await puppeteer.launch({
-            headless: "new",
-            args: [
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-dev-shm-usage",
-                "--disable-gpu"
-            ]
+            args: chromium.args,
+            executablePath: await chromium.executablePath(),
+            headless: chromium.headless
         });
 
         const page = await browser.newPage();
 
-        await page.setContent(html, {
-            waitUntil: "networkidle0",
-            timeout: 60000
-        });
+        await page.setContent(html, { waitUntil: "networkidle0" });
 
         const pdf = await page.pdf({
             format: "A4",
@@ -47,8 +41,4 @@ app.post("/pdf", async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3001;
-
-app.listen(PORT, () => {
-    console.log("PDF service running on port " + PORT);
-});
+app.listen(3001, () => console.log("PDF service running"));
