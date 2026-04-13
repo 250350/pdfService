@@ -12,6 +12,7 @@ app.use(express.json({ limit: "50mb" }));
 
 app.post("/pdf", async (req, res) => {
     try {
+        console.log("BEFORE PDF");
         const { html } = req.body;
 
         const browser = await puppeteer.launch({
@@ -20,17 +21,17 @@ app.post("/pdf", async (req, res) => {
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
                 "--disable-dev-shm-usage",
-                "--disable-gpu",
-                "--no-zygote",
-                "--single-process"
+                "--disable-gpu"
             ]
         });
 
         const page = await browser.newPage();
 
         await page.setContent(html, {
-            waitUntil: "networkidle0"
+            waitUntil: "networkidle0",
+            timeout: 60000
         });
+        console.log("HTML RECEIVED LENGTH:", html.length);
 
         await page.emulateMediaType("print");
 
@@ -45,6 +46,7 @@ app.post("/pdf", async (req, res) => {
 
         res.setHeader("Content-Type", "application/pdf");
         res.send(pdf);
+        console.log("AFTER PDF");
 
     } catch (e) {
         console.error("PDF ERROR FULL:", e);
