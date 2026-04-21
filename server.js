@@ -40,5 +40,7 @@ app.post("/pdf", async (req, res) => {
         res.status(500).send(e.message);
     }
 });
-
+app.get("/ping", (req, res) => {
+    res.status(200).send("ok");
+});
 app.listen(3001, () => console.log("PDF service running"));
